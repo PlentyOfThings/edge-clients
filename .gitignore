@@ -1,3 +1,5 @@
+### Node
+
 # Logs
 logs
 *.log
@@ -73,7 +75,27 @@ typings/
 .serverless
 
 # build output
-/dist
-/prebuild
+dist
+prebuild
 
+### Rust
+
+target
+**/*.rs.bk
+
+### C++
+
+# Ignore the build and lib dirs
+build
+lib
+
+# Ignore any executables
+bin
+
+### Generic
 .DS_Store
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
