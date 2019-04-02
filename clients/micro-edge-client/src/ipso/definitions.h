@@ -1,5 +1,10 @@
-#ifndef MEC_IPSO_H_
-#define MEC_IPSO_H_
+#ifndef MEC_IPSO_DEFINITIONS_H_
+#define MEC_IPSO_DEFINITIONS_H_
+
+/*
+  Derived from
+  http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html
+*/
 
 #include <stdint.h>
 
