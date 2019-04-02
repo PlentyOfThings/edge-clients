@@ -7,62 +7,124 @@ namespace ipso
 {
 enum struct kResource : uint16_t
 {
-  /*
-    Common resources.
-
-    Only single instances of each of these are allowed.
-    These all apply to each of the common objects.
-  */
-
-  SensorValue = 5700,               // R, Mandatory, Float
-  Units = 5701,                     // R, String
-  MinMeasuredValue = 5601,          // R, Float
-  MaxMeasuredValue = 5602,          // R, Float
-  MinRangeValue = 5603,             // R, Float
-  MaxRangeValue = 5604,             // R, Float
-  ResetMinMaxMeasuredValues = 5605, // E
-  CalibrationOffset = 5535,         // R, W, Float
-  ApplicationType = 5750,           // R, W, String
-
-  /*
-    Special resources.
-
-    Same restriction as common resources.
-    These apply to some of the special objects.
-  */
-
-  ResetCumulativeEnergy = 5822, // E
-  CompassDirection = 5705,      // R, Mandatory, Float (units: deg, range: 0-360 incl)
-  CurrentTime = 5506,           // R, W, Mandatory, Time (unix)
-  FractionalTime = 5507,        // R, W, Float (range: 0-1 incl)
-  XValue = 5702,                // R, Mandatory, Float
-  YValue = 5703,                // R, Float
-  ZValue = 5704,                // R, Float
-  SensorUnits = 5701,           // R, String
-  MinXValue = 5508,             // R, Float
-  MaxXValue = 5509,             // R, Float
-  MinYValue = 5510,             // R, Float
-  MaxYValue = 5511,             // R, Float
-  MinZValue = 5512,             // R, Float
-  MaxZValue = 5513,             // R, Float
-  Color = 5706,                 // R, W, Mandatory, String
-  Latitude = 5513,              // R, Mandatory, String
-  Longitude = 5514,             // R, Mandatory, String
-  Altitude = 5515,              // R, String
-  Uncertainty = 5516,           // R, String
-  Velocity = 5517,              // R, Opaque
-  Timestamp = 5518,             // R, Time (unix)
+  DigitalInputState = 5500,
+  DigitalInputCounter = 5501,
+  DigitalInputPolarity = 5502,
+  DigitalInputDebounce = 5503,
+  DigitalInputEdgeSelection = 5504,
+  DigitalInputCounterReset = 5505,
+  CurrentTime = 5506,
+  FractionalTime = 5507,
+  MinXValue = 5508,
+  MaxXValue = 5509,
+  MinYValue = 5510,
+  MaxYValue = 5511,
+  MinZValue = 5512,
+  MaxZValue = 5513,
+  Latitude = 5514,
+  Longitude = 5515,
+  Uncertainty = 5516,
+  Velocity = 5517,
+  Timestamp = 5518,
+  MinLimit = 5519,
+  MaxLimit = 5520,
+  DelayDuration = 5521,
+  Clip = 5522,
+  Trigger = 5523,
+  Duration = 5524,
+  MinimumOffTime = 5525,
+  TimerMode = 5526,
+  Text = 5527,
+  XCoordinate = 5528,
+  YCoordinate = 5529,
+  ClearDisplay = 5530,
+  Contrast = 5531,
+  IncreaseInputState = 5532,
+  DecreaseInputState = 5533,
+  Counter = 5534,
+  CalibrationOffset = 5535,
+  CurrentPosition = 5536,
+  TransitionTime = 5537,
+  RemainingTime = 5538,
+  UpCounter = 5541,
+  DownCounter = 5542,
+  DigitalState = 5543,
+  CumulativeTime = 5544,
+  MaxXCoordinate = 5545,
+  MaxYCoordinate = 5546,
+  MultiStateInput = 5547,
+  Level = 5548,
+  DigitalOutputState = 5550,
+  DigitalOutputPolarity = 5551,
+  AnalogInputCurrentValue = 5600,
+  MinMeasuredValue = 5601,
+  MaxMeasuredValue = 5602,
+  MinRangeValue = 5603,
+  MaxRangeValue = 5604,
+  ResetMinMaxMeasuredValues = 5605,
+  AnalogOutputCurrentValue = 5650,
+  SensorValue = 5700,
+  SensorUnits = 5701,
+  XValue = 5702,
+  YValue = 5703,
+  ZValue = 5704,
+  CompassDirection = 5705,
+  Colour = 5706,
+  ApplicationType = 5750,
+  SensorType = 5751,
+  InstantaneousActivePower = 5800,
+  MinMeasuredActivePower = 5801,
+  MaxMeasuredActivePower = 5802,
+  MinRangeActivePower = 5803,
+  MaxRangeActivePower = 5804,
+  CumulativeActivePower = 5805,
+  ActivePowerCalibration = 5806,
+  InstantaneousReactivePower = 5810,
+  MinMeasuredReactivePower = 5811,
+  MaxMeasuredReactivePower = 5812,
+  MinRangeReactivePower = 5813,
+  MaxRangeReactivePower = 5814,
+  CumulativeReactivePower = 5815,
+  ReactivePowerCalibration = 5816,
+  PowerFactor = 5820,
+  CurrentCalibration = 5821,
+  ResetCumulativeEnergy = 5822,
+  EventIdentifier = 5823,
+  StartTime = 5824,
+  DurationInMin = 5825,
+  CriticalityLevel = 5826,
+  AvgLoadAdjPct = 5827,
+  DutyCycle = 5828,
+  OnOff = 5850,
+  Dimmer = 5851,
+  OnTime = 5852,
+  MultiStateOutput = 5853,
+  OffTime = 5854,
+  SetPointValue = 5900,
+  BusyToClearDelay = 5903,
+  ClearToBusyDelay = 5904,
 };
 
 enum struct kObject : uint16_t
 {
-  /*
-    Common objects
-
-    Multiple instances of each of these are allowed.
-    Each one has all of the common resources attached.
-  */
-
+  DigitalInput = 3200,
+  DigitalOutput = 3201,
+  AnalogInput = 3202,
+  AnalogOutput = 3203,
+  GenericSensor = 3300,
+  Illuminance = 3301,
+  Presence = 3302,
+  Temperature = 3303,
+  Humidity = 3304,
+  PowerMeasurement = 3305,
+  Actuation = 3306,
+  SetPoint = 3308,
+  LoadControl = 3310,
+  LightControl = 3311,
+  PowerControl = 3312,
+  Accelerometer = 3313,
+  Magnetometer = 3314,
+  Barometer = 3315,
   Voltage = 3316,
   Current = 3317,
   Frequency = 3318,
@@ -77,82 +139,27 @@ enum struct kObject : uint16_t
   Conductivity = 3327,
   Power = 3328,
   PowerFactor = 3329,
-  Rate = 3346,
   Distance = 3330,
-
-  /*
-    Special objects.
-
-    Same freedom as the common objects.
-    Resources for each are specified in comments.
-  */
-
-  /**
-   * Resources:
-   * - SensorValue (unit: Wh)
-   * - Units
-   * - ResetCumulativeEnergy
-   * - ApplicationType
-   */
   Energy = 3331,
-
-  /**
-   * Resources:
-   * - CompassDirection
-   * - MinMeasuredValue
-   * - MaxMeasuredValue
-   * - ResetMinMaxMeasuredValues
-   * - ApplicationType
-   */
   Direction = 3332,
-
-  /**
-   * Resources:
-   * - CurrentTime (unit: s, unix time (seconds since epoc))
-   * - FractionalTime
-   * - ApplicationType
-   */
   Time = 3333,
-
-  /**
-   * Resources:
-   * - XValue
-   * - YValue
-   * - ZValue
-   * - SensorUnits
-   * - MinXValue
-   * - MaxXValue
-   * - MinYValue
-   * - MaxYValue
-   * - MinZValue
-   * - MaxZValue
-   * - ResetMinMaxMeasuredValues
-   * - MinRangeValue
-   * - MaxRangeValue
-   * - ApplicationType
-   */
   Gyrometer = 3334,
-
-  /**
-   * Resources:
-   * - Color
-   * - Units
-   * - ApplicationType
-   */
-  Color = 3335,
-
-  /**
-   * Resources:
-   * - Latitude
-   * - Longitude
-   * - Altitude
-   * - Uncertainty
-   * - CompassDirection
-   * - Velocity
-   * - Timestamp
-   * - ApplicationType
-   */
-  GpsLocation = 3336,
+  Colour = 3335,
+  Location = 3336,
+  Positioner = 3337,
+  Buzzer = 3338,
+  AudioClip = 3339,
+  Timer = 3340,
+  AddressableTextDisplay = 3341,
+  OnOffSwitch = 3342,
+  Dimmer = 3343,
+  UpDownControl = 3344,
+  MultipleAxisJoystick = 3345,
+  Rate = 3346,
+  PushButton = 3347,
+  MultiStateSelector = 3348,
+  Bitmap = 3349,
+  Stopwatch = 3350,
 };
 } // namespace ipso
 
