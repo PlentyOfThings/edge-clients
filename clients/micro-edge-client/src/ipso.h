@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+namespace mec
+{
 namespace ipso
 {
 enum struct kResource : uint16_t
@@ -162,5 +164,6 @@ enum struct kObject : uint16_t
   Stopwatch = 3350,
 };
 } // namespace ipso
+} // namespace mec
 
 #endif
