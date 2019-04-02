@@ -4,6 +4,9 @@
 /*
   Derived from
   http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html
+
+  Shared resources listing can be found here:
+  http://upfiles.heclouds.com/forum-app/2018/07/15/673e6333f545809ddfae2f98ee4a4a73.pdf
 */
 
 #include <stdint.h>
