@@ -1,5 +1,5 @@
-#ifndef MEC_IPSO_DEFINITIONS_H_
-#define MEC_IPSO_DEFINITIONS_H_
+#ifndef MEC_IPSO_DEFINITIONS_HPP_
+#define MEC_IPSO_DEFINITIONS_HPP_
 
 /*
   Derived from
