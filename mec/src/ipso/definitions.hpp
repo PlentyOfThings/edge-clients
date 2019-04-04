@@ -15,6 +15,7 @@ namespace mec
 {
 namespace ipso
 {
+
 enum struct kResource : uint16_t
 {
   DigitalInputState = 5500,
@@ -171,6 +172,7 @@ enum struct kObject : uint16_t
   Bitmap = 3349,
   Stopwatch = 3350,
 };
+
 } // namespace ipso
 } // namespace mec
 
