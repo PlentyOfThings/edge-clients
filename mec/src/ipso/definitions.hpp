@@ -11,13 +11,10 @@
 
 #include <stdint.h>
 
-namespace mec
-{
-namespace ipso
-{
+namespace mec {
+namespace ipso {
 
-enum struct kResource : uint16_t
-{
+enum struct Resource : uint16_t {
   DigitalInputState = 5500,
   DigitalInputCounter = 5501,
   DigitalInputPolarity = 5502,
@@ -116,8 +113,7 @@ enum struct kResource : uint16_t
   ClearToBusyDelay = 5904,
 };
 
-enum struct kObject : uint16_t
-{
+enum struct Object : uint16_t {
   DigitalInput = 3200,
   DigitalOutput = 3201,
   AnalogInput = 3202,
