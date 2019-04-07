@@ -1,0 +1,3 @@
+[submodule "external_libs/bson"]
+	path = external_libs/bson
+	url = https://github.com/PlentyOfThings/cpp-bson.git
