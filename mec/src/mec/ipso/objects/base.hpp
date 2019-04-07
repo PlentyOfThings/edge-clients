@@ -27,9 +27,8 @@ public:
       doc.appendInt32(kPayloadId, object_)
           .appendInt32(kPayloadInstance, objectInstance_)
           .appendInt32(kPayloadTimestamp, std::time(nullptr))
-          .appendDocument(kPayloadResources, [this](bsons::Document &doc) {
-            buildResources(doc);
-          });
+          .appendDoc(kPayloadResources,
+                     [this](bsons::Document &doc) { buildResources(doc); });
     });
   }
 
