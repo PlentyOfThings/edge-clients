@@ -6,6 +6,7 @@
 #include "../definitions.hpp"
 #include "bson/bson.h"
 #include <ctime>
+#include <stdlib.h>
 
 namespace bsons = pot::bson::serializer;
 
@@ -34,7 +35,7 @@ public:
 
 protected:
   virtual void buildResources(bsons::Document &doc) {
-    doc.appendStr(static_cast<int32_t>(Resource::ApplicationType), appType_);
+    doc.appendStr(Resource::sApplicationType, appType_);
   }
 
 private:
