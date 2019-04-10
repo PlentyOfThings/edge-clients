@@ -7,6 +7,9 @@
 
   Shared resources listing can be found here:
   http://upfiles.heclouds.com/forum-app/2018/07/15/673e6333f545809ddfae2f98ee4a4a73.pdf
+
+  Private reuse range
+  26241 - 32768
 */
 
 #include <stdint.h>
@@ -174,6 +177,9 @@ MEC_IPSO_CONST(PushButton, 3347);
 MEC_IPSO_CONST(MultiStateSelector, 3348);
 MEC_IPSO_CONST(Bitmap, 3349);
 MEC_IPSO_CONST(Stopwatch, 3350);
+
+// Custom IPSO objects
+MEC_IPSO_CONST(Ping, 29000);
 
 }; // namespace Object
 

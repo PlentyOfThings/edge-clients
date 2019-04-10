@@ -2,6 +2,7 @@
 #define MEC_IPSO_OBJECTS_BASE_HPP_
 
 #include "../../utils.hpp"
+#include "../build_result.hpp"
 #include "../consts.hpp"
 #include "../definitions.hpp"
 #include "bson/bson.h"
@@ -12,38 +13,66 @@ namespace bsons = pot::bson::serializer;
 
 namespace mec {
 namespace ipso {
+namespace objects {
 
 /**
  * The base class all IPSO objects derive from.
  */
-class BaseObject {
+class Base {
 public:
-  int getApplicationType(char *appType, size_t len) {
-    return copy_str_to(appType_, appType, len);
+  uint16_t getObjectId() {
+    return object_id_;
   }
 
-  bsons::Result buildUpData(uint8_t buf[], size_t len) {
-    return bsons::Document::build(buf, len, [this](bsons::Document &doc) {
-      doc.appendInt32(kPayloadId, object_)
-          .appendInt32(kPayloadInstance, objectInstance_)
-          .appendInt32(kPayloadTimestamp, std::time(nullptr))
-          .appendDoc(kPayloadResources,
-                     [this](bsons::Document &doc) { buildResources(doc); });
-    });
+  uint32_t getObjectInstance() {
+    return object_instance_;
+  }
+
+  char *getAppType() {
+    return app_type_;
+  }
+
+  int getAppType(char *app_type, size_t len) {
+    return copy_str_to(app_type_, app_type, len);
+  }
+
+  BuildResult buildUpData(uint8_t buf[], size_t len) {
+    bool has_data = false;
+    auto res = bsons::Document::build(
+        buf, len, [this, &has_data](bsons::Document &doc) {
+          doc.appendInt32(kPayloadId, object_id_)
+              .appendInt32(kPayloadInstance, object_instance_)
+              .appendInt32(kPayloadTimestamp, std::time(nullptr))
+              .appendDoc(kPayloadResources,
+                         [this, &has_data](bsons::Document &doc) {
+                           has_data = buildResources(doc);
+                         });
+        });
+
+    return { .res = res, .has_data = has_data };
   }
 
 protected:
-  virtual void buildResources(bsons::Document &doc) {
-    doc.appendStr(Resource::sApplicationType, appType_);
+  Base(uint16_t object_id, uint32_t object_instance) :
+      object_id_(object_id), object_instance_(object_instance) {}
+
+  virtual bool buildResources(bsons::Document &doc) {
+    doc.appendStr(Resource::sApplicationType, app_type_);
+
+    // For now, we always return all data.
+    // Once deserialization is implemented, we will use it
+    // to decide what values to include.
+    return true;
   }
 
-private:
-  uint16_t object_;
-  uint16_t objectInstance_;
+protected:
+  uint16_t object_id_;
+  uint32_t object_instance_;
 
-  char appType_[kLenAppType];
+  char app_type_[kLenAppType];
 };
 
+} // namespace objects
 } // namespace ipso
 } // namespace mec
 

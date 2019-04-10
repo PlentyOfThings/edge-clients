@@ -3,7 +3,7 @@
 
 #include "stdlib.h"
 
-inline size_t copy_str_to(const char *src, char *dest, size_t len) {
+inline size_t copy_str_to(const char src[], char dest[], size_t len) {
   if (len < 1) {
     return 0;
   }

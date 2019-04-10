@@ -8,9 +8,9 @@ void setup() {
 
 void loop() {
   delay(1000);
-  Serial.println("Hello World!");
+  Serial.println(F("Hello World!"));
 
-  mec::ipso::BaseObject obj;
+  mec::ipso::objects::custom::Ping obj(0, 10);
   uint8_t buf[256];
 
   obj.buildUpData(buf, sizeof(buf));
