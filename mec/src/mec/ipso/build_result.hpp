@@ -1,7 +1,7 @@
 #ifndef MEC_IPSO_BUILD_RESULT_H_
 #define MEC_IPSO_BUILD_RESULT_H_
 
-#include "bson/bson.h"
+#include "bson/bson.hpp"
 
 namespace mec {
 namespace ipso {
