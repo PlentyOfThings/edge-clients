@@ -23,15 +23,19 @@ The MQTT framework is based on an 'udge' system, where each letter is the action
 The MQTT topics look like this:
 
 ```
-device/{deviceName}/{udge}/{messageType}
+device/{deviceId}/{udge}/{messageType}(/{messageFormat})?
 ```
 
-- `{deviceName}`
-  - The name of the current device
+- `{deviceId}`
+  - The id of the device that was given on registration
 - `{udge}`
   - One of `u`, `d`, `g`, `e`
 - `{messageType}`
+  - Currently only `ipso`
+  - Messages on this topic can be either JSON or BSON, so listeners should support both
+- `{messageFormat}`
   - One of `json`, `bson`
+  - Only used if configured on registration, otherwise it will be completely omitted
 
 #### Payloads
 
