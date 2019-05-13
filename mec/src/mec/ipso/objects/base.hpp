@@ -6,10 +6,11 @@
 #include "../consts.hpp"
 #include "../definitions.hpp"
 #include "bson/bson.hpp"
+#include <cstdlib>
 #include <ctime>
-#include <stdlib.h>
 
 namespace bsons = pot::bson::serializer;
+namespace bsond = pot::bson::deserializer;
 
 namespace mec {
 namespace ipso {
@@ -20,6 +21,11 @@ namespace objects {
  */
 class Base {
 public:
+  static inline bool hasResourceId(const bsond::Array *get_ids,
+                                   const uint16_t resource_id) {
+    return get_ids && get_ids->containsInt(resource_id);
+  }
+
   uint16_t getObjectId() {
     return object_id_;
   }
@@ -32,37 +38,90 @@ public:
     return app_type_;
   }
 
-  int getAppType(char *app_type, size_t len) {
+  int getAppType(char *app_type, const size_t len) {
     return copy_str_to(app_type_, app_type, len);
   }
 
-  BuildResult buildUpData(uint8_t buf[], size_t len) {
+  BuildResult buildUpData(uint8_t buf[], const size_t len,
+                          const bsond::Array *get_ids = nullptr) {
     bool has_data = false;
     auto res = bsons::Document::build(
-        buf, len, [this, &has_data](bsons::Document &doc) {
-          doc.appendInt32(kPayloadId, object_id_)
+        buf, len, [this, &has_data, get_ids](bsons::Document &up) {
+          up.appendInt32(kPayloadId, object_id_)
               .appendInt32(kPayloadInstance, object_instance_)
               .appendInt32(kPayloadTimestamp, std::time(nullptr))
-              .appendDoc(kPayloadResources,
-                         [this, &has_data](bsons::Document &doc) {
-                           has_data = buildResources(doc);
-                         });
+              .appendDoc(kPayloadResources, [this, &has_data, get_ids](
+                                                bsons::Document &resources) {
+                has_data = buildResources(resources, get_ids);
+              });
         });
 
     return { .res = res, .has_data = has_data };
   }
 
 protected:
-  Base(uint16_t object_id, uint32_t object_instance) :
+  Base(const uint16_t object_id, const uint32_t object_instance) :
       object_id_(object_id), object_instance_(object_instance) {}
 
-  virtual bool buildResources(bsons::Document &doc) {
-    doc.appendStr(Resource::sApplicationType, app_type_);
+  /**
+   * Builds the resources document that will be sent to the MQTT topic.
+   * If it returns false, then it means that no resources needed
+   * to send up data, and so the entire document will be discarded.
+   *
+   * This function will be called on a regular interval, but of
+   * an undefined time, meaning overriding implementations should
+   * not rely on it, and keep track of timing themselves.
+   *
+   * All overriding implementations should ALWAYS call the super
+   * method, otherwise it will not function correctly.
+   */
+  virtual bool buildResources(bsons::Document &resources,
+                              const bsond::Array *get_ids) {
+    if (get_ids) {
+      bool appended_resources = false;
 
-    // For now, we always return all data.
-    // Once deserialization is implemented, we will use it
-    // to decide what values to include.
-    return true;
+      for (auto const &el : *get_ids) {
+        auto type = el.type();
+
+        // IDs can only be integers, anything else is ignored.
+        if (type == pot::bson::Element::Int32 ||
+            type == pot::bson::Element::Int64) {
+          int64_t id;
+
+          if (type == pot::bson::Element::Int32) {
+            id = el.getInt32();
+          } else {
+            id = el.getInt64();
+          }
+
+          appended_resources |= appendGetOnlyResource(resources, id);
+        }
+      }
+
+      return appended_resources;
+    } else {
+      // We have no resources to get, by default we send nothing up.
+      return false;
+    }
+  }
+
+  /**
+   * Appends the resource of the given ID to the up document.
+   * Returns whether the resource by that ID was found and appended.
+   *
+   * Overriding implementations only need to call the super method
+   * if none of their own resources match, otherwise they can return
+   * directly.
+   */
+  virtual bool appendGetOnlyResource(bsons::Document &resources,
+                                     const int64_t resource_id) {
+    switch (resource_id) {
+      case Resource::iApplicationType:
+        resources.appendStr(Resource::sApplicationType, app_type_);
+        return true;
+      default:
+        return false;
+    }
   }
 
 protected:

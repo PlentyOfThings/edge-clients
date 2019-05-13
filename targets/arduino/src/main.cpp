@@ -1,6 +1,6 @@
 #include "mec/mec.h"
 #include <Arduino.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 void setup() {
   Serial.begin(9600);

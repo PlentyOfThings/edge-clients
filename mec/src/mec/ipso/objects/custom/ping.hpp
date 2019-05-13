@@ -2,42 +2,43 @@
 #define MEC_IPSO_OBJECTS_CUSTOM_PING_H_
 
 #include "../../definitions.hpp"
-#include "../base.hpp"
+#include "../report_interval.hpp"
+#include <cstdlib>
 #include <ctime>
-#include <stdlib.h>
 
 namespace mec {
 namespace ipso {
 namespace objects {
 namespace custom {
 
-class Ping : public Base {
+class Ping : public ReportInterval {
 public:
-  Ping(uint32_t object_instance, time_t delay_time) :
-      Base(Object::iPing, object_instance), delay_time_(delay_time) {}
+  Ping(const uint32_t object_instance, const int64_t report_interval) :
+      ReportInterval(Object::iPing, object_instance, report_interval) {}
+
+  Ping(const uint32_t object_instance) :
+      ReportInterval(Object::iPing, object_instance) {}
 
   int32_t getCounter() {
     return counter_;
   }
 
 protected:
-  bool buildResources(bsons::Document &doc) override {
+  bool buildResources(bsons::Document &resources,
+                      const bsond::Array *get_ids) override {
     bool has_data = false;
-    time_t ctime = std::time(nullptr);
 
-    if (ctime - last_count_time_ >= delay_time_) {
-      last_count_time_ = ctime;
-      doc.appendInt32(Resource::sCounter, counter_++);
+    if (ReportInterval::shouldReport() ||
+        Base::hasResourceId(get_ids, Resource::iCounter)) {
+      resources.appendInt32(Resource::sCounter, counter_++);
       has_data = true;
     }
 
-    return Base::buildResources(doc) || has_data;
+    return ReportInterval::buildResources(resources, get_ids) || has_data;
   }
 
 private:
   int32_t counter_ = 0;
-  time_t delay_time_;
-  time_t last_count_time_ = 0;
 };
 
 } // namespace custom

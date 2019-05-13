@@ -12,7 +12,7 @@
   26241 - 32768
 */
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace mec {
 namespace ipso {
@@ -119,6 +119,9 @@ MEC_IPSO_CONST(OffTime, 5854);
 MEC_IPSO_CONST(SetPointValue, 5900);
 MEC_IPSO_CONST(BusyToClearDelay, 5903);
 MEC_IPSO_CONST(ClearToBusyDelay, 5904);
+
+// Custom resources
+MEC_IPSO_CONST(ReportInterval, 27000);
 
 }; // namespace Resource
 
