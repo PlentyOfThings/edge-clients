@@ -13,7 +13,7 @@ namespace objects {
 class ReportInterval : public Base {
 public:
   int64_t getReportIterval() const {
-    return report_interval_;
+    return this->report_interval_;
   }
 
 protected:
@@ -30,8 +30,8 @@ protected:
     bool should_report = false;
     time_t ctime = std::time(nullptr);
 
-    if (ctime - last_report_time_ >= report_interval_) {
-      last_report_time_ = ctime;
+    if (ctime - this->last_report_time_ >= this->report_interval_) {
+      this->last_report_time_ = ctime;
       should_report = true;
     }
 
@@ -41,7 +41,7 @@ protected:
   bool appendGetOnlyResource(bsons::Document &doc, const int64_t resource_id) {
     switch (resource_id) {
       case Resource::iReportInterval:
-        doc.appendInt64(Resource::sReportInterval, report_interval_);
+        doc.appendInt64(Resource::sReportInterval, this->report_interval_);
         return true;
       default:
         return Base::appendGetOnlyResource(doc, resource_id);

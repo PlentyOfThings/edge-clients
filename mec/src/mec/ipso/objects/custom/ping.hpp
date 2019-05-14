@@ -20,7 +20,7 @@ public:
       ReportInterval(Object::iPing, object_instance) {}
 
   int32_t getCounter() {
-    return counter_;
+    return this->counter_;
   }
 
 protected:
@@ -28,13 +28,13 @@ protected:
                       const bsond::Array *get_ids) override {
     bool has_data = false;
 
-    if (ReportInterval::shouldReport() ||
+    if (this->ReportInterval::shouldReport() ||
         Base::hasResourceId(get_ids, Resource::iCounter)) {
-      resources.appendInt32(Resource::sCounter, counter_++);
+      resources.appendInt32(Resource::sCounter, this->counter_++);
       has_data = true;
     }
 
-    return ReportInterval::buildResources(resources, get_ids) || has_data;
+    return this->ReportInterval::buildResources(resources, get_ids) || has_data;
   }
 
 private:

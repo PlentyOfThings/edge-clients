@@ -27,19 +27,19 @@ public:
   }
 
   uint16_t getObjectId() {
-    return object_id_;
+    return this->object_id_;
   }
 
   uint32_t getObjectInstance() {
-    return object_instance_;
+    return this->object_instance_;
   }
 
   char *getAppType() {
-    return app_type_;
+    return this->app_type_;
   }
 
   int getAppType(char *app_type, const size_t len) {
-    return copy_str_to(app_type_, app_type, len);
+    return copy_str_to(this->app_type_, app_type, len);
   }
 
   BuildResult buildUpData(uint8_t buf[], const size_t len,
@@ -52,7 +52,7 @@ public:
               .appendInt32(kPayloadTimestamp, std::time(nullptr))
               .appendDoc(kPayloadResources, [this, &has_data, get_ids](
                                                 bsons::Document &resources) {
-                has_data = buildResources(resources, get_ids);
+                has_data = this->buildResources(resources, get_ids);
               });
         });
 
@@ -86,7 +86,8 @@ protected:
         // IDs can only be integers, anything else is ignored.
         if (type == pot::bson::Element::Int32 ||
             type == pot::bson::Element::Int64) {
-          appended_resources |= appendGetOnlyResource(resources, el.getInt());
+          appended_resources |=
+              this->appendGetOnlyResource(resources, el.getInt());
         }
       }
 
@@ -109,7 +110,7 @@ protected:
                                      const int64_t resource_id) {
     switch (resource_id) {
       case Resource::iApplicationType:
-        resources.appendStr(Resource::sApplicationType, app_type_);
+        resources.appendStr(Resource::sApplicationType, this->app_type_);
         return true;
       default:
         return false;
