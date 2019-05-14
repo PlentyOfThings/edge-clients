@@ -86,15 +86,7 @@ protected:
         // IDs can only be integers, anything else is ignored.
         if (type == pot::bson::Element::Int32 ||
             type == pot::bson::Element::Int64) {
-          int64_t id;
-
-          if (type == pot::bson::Element::Int32) {
-            id = el.getInt32();
-          } else {
-            id = el.getInt64();
-          }
-
-          appended_resources |= appendGetOnlyResource(resources, id);
+          appended_resources |= appendGetOnlyResource(resources, el.getInt());
         }
       }
 
