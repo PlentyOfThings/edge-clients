@@ -38,7 +38,8 @@ protected:
     return should_report;
   }
 
-  bool appendGetOnlyResource(bsons::Document &doc, const int64_t resource_id) {
+  bool appendGetOnlyResource(bsons::Document &doc,
+                             const int64_t resource_id) override {
     switch (resource_id) {
       case Resource::iReportInterval:
         doc.appendInt64(Resource::sReportInterval, this->report_interval_);

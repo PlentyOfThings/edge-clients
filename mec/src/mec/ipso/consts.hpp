@@ -2,6 +2,7 @@
 #define MEC_IPSO_CONSTS_H_
 
 #include "cstdlib"
+#include <cstdint>
 
 namespace mec {
 namespace ipso {

@@ -11,10 +11,10 @@ insert_final_newline = true
 indent_size = 4
 
 [*.cpp]
-indent_size = 4
+indent_size = 2
 
 [*.c]
-indent_size = 4
+indent_size = 2
 
 [Makefile]
 indent_size = 4

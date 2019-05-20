@@ -25,7 +25,7 @@ public:
 
 protected:
   bool buildResources(bsons::Document &resources,
-                      const bsond::Array *get_ids) override {
+                      const std::shared_ptr<bsond::Array> get_ids) override {
     bool has_data = false;
 
     if (this->ReportInterval::shouldReport() ||
