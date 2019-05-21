@@ -8,7 +8,6 @@
 #include "bson/bson.hpp"
 #include <cstdlib>
 #include <ctime>
-#include <memory>
 
 namespace bsons = pot::bson::serializer;
 namespace bsond = pot::bson::deserializer;
@@ -22,7 +21,7 @@ namespace objects {
  */
 class Base {
 public:
-  static inline bool hasResourceId(const std::shared_ptr<bsond::Array> get_ids,
+  static inline bool hasResourceId(const bsond::Array *get_ids,
                                    const uint16_t resource_id) {
     return get_ids && get_ids->containsInt(resource_id);
   }
@@ -48,7 +47,7 @@ public:
   }
 
   BuildResult buildUpData(uint8_t buf[], const size_t len,
-                          const std::shared_ptr<bsond::Array> get_ids) {
+                          const bsond::Array *get_ids) {
     bool has_data = false;
     auto res = bsons::Document::build(
         buf, len, [this, &has_data, get_ids](bsons::Document &up) {
@@ -81,7 +80,7 @@ protected:
    * method, otherwise it will not function correctly.
    */
   virtual bool buildResources(bsons::Document &resources,
-                              const std::shared_ptr<bsond::Array> get_ids) {
+                              const bsond::Array *get_ids) {
     if (get_ids) {
       bool appended_resources = false;
 

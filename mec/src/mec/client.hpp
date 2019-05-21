@@ -4,48 +4,59 @@
 #include "./ipso/consts.hpp"
 #include "./ipso/objects/base.hpp"
 #include <cstdlib>
-#include <memory>
 
 namespace mec {
 
 class Client {
 public:
-  Client(std::shared_ptr<mec::ipso::objects::Base> objs[], size_t objs_len) :
+  Client(ipso::objects::Base *objs[], size_t objs_len) :
       objects_(objs), objects_length_(objs_len) {}
 
-  std::shared_ptr<ipso::BuildResult> handle(uint8_t up_buf[], size_t up_len) {
-    return this->handle(nullptr, 0, up_buf, up_len);
+  bool handle(uint8_t up_buf[], size_t up_len, ipso::BuildResult &result) {
+    return this->handle(nullptr, 0, up_buf, up_len, result);
   }
 
-  std::shared_ptr<ipso::BuildResult> handle(uint8_t down_buf[], size_t down_len,
-                                            uint8_t up_buf[], size_t up_len) {
+  bool handle(uint8_t down_buf[], size_t down_len, uint8_t up_buf[],
+              size_t up_len, ipso::BuildResult &result) {
     size_t current_object;
-    std::shared_ptr<bsond::Array> resources;
+    bsond::Array resources;
+    bool got_resources = false;
 
     if (down_buf) {
       if (!this->findObject(down_buf, down_len, current_object, resources)) {
-        return nullptr;
+        return false;
       }
+      got_resources = true;
     } else {
       current_object = this->next_object_++;
       this->next_object_ %= this->objects_length_;
     }
 
-    return std::make_shared<ipso::BuildResult>(
-        this->objects_[current_object]->buildUpData(up_buf, up_len, resources));
+    if (got_resources) {
+      result = this->objects_[current_object]->buildUpData(up_buf, up_len,
+                                                           &resources);
+    } else {
+      result = this->objects_[current_object]->buildUpData(up_buf, up_len);
+    }
+    return true;
   }
 
 private:
-  std::shared_ptr<mec::ipso::objects::Base> *objects_;
+  ipso::objects::Base **objects_;
   const size_t objects_length_;
   size_t next_object_ = 0;
 
   bool findObject(uint8_t down_buf[], size_t down_len, size_t &index,
-                  std::shared_ptr<bsond::Array> &resources) {
+                  bsond::Array &resources) {
     bsond::Document down(down_buf, down_len);
+
+    if (!down.valid()) {
+      return false;
+    }
 
     int64_t objectId = -1;
     int64_t objectInstance = -1;
+    bool found_resources = false;
     for (auto const el : down) {
       if (el.nameEquals(ipso::kPayloadId)) {
         if (el.isInt()) {
@@ -57,13 +68,14 @@ private:
         }
       } else if (el.nameEquals(ipso::kPayloadResources)) {
         if (el.type() == pot::bson::Element::Array) {
-          resources = std::make_shared<bsond::Array>(el.getArr());
+          resources = el.getArr();
+          found_resources = true;
         }
       }
     }
 
     // If none of the fields were set correctly, bail out here.
-    if (objectId < 0 || objectInstance < 0 || !resources) {
+    if (objectId < 0 || objectInstance < 0 || !found_resources) {
       return false;
     }
 

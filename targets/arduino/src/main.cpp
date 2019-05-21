@@ -20,7 +20,6 @@
 #include <MQTT.h>
 #include <WiFiClientSecure.h>
 #include <cstdlib>
-#include <memory>
 
 // Arduino objects.
 static WiFiClientSecure net;
@@ -29,9 +28,7 @@ static WiFiClientSecure net;
 static mec::ipso::objects::custom::Ping object_ping(0, 10);
 
 // MEC Client
-static std::shared_ptr<mec::ipso::objects::Base> objects[] = {
-  std::shared_ptr<mec::ipso::objects::Base>(&object_ping)
-};
+static mec::ipso::objects::Base *objects[] = { &object_ping };
 static mec::Client client(objects, sizeof(objects) / sizeof(objects[0]));
 
 void setup() {
@@ -43,11 +40,11 @@ void loop() {
   Serial.println(F("Hello World!"));
 
   uint8_t buf[256];
-  auto res = client.handle(buf, sizeof(buf));
 
-  if (res) {
+  mec::ipso::BuildResult res;
+  if (client.handle(buf, sizeof(buf), res)) {
     Serial.println(F("Got result"));
-    if (res->has_data) {
+    if (res.has_data) {
       Serial.println(F("Got data"));
     } else {
       Serial.println(F("No data"));
