@@ -1,16 +1,14 @@
 #ifndef MEC_IPSO_OBJECTS_BASE_HPP_
 #define MEC_IPSO_OBJECTS_BASE_HPP_
 
+#include "../../bson_utils.hpp"
+#include "../../fields.hpp"
 #include "../../utils.hpp"
 #include "../build_result.hpp"
 #include "../consts.hpp"
 #include "../definitions.hpp"
-#include "bson/bson.hpp"
 #include <cstdlib>
 #include <ctime>
-
-namespace bsons = pot::bson::serializer;
-namespace bsond = pot::bson::deserializer;
 
 namespace mec {
 namespace ipso {
@@ -51,11 +49,11 @@ public:
     bool has_data = false;
     auto res = bsons::Document::build(
         buf, len, [this, &has_data, get_ids](bsons::Document &up) {
-          up.appendInt32(kPayloadId, object_id_)
-              .appendInt32(kPayloadInstance, object_instance_)
-              .appendInt32(kPayloadTimestamp, std::time(nullptr))
-              .appendDoc(kPayloadResources, [this, &has_data, get_ids](
-                                                bsons::Document &resources) {
+          up.appendInt32(fields::kId, object_id_)
+              .appendInt32(fields::kInstance, object_instance_)
+              .appendInt32(fields::kTimestamp, std::time(nullptr))
+              .appendDoc(fields::kResources, [this, &has_data, get_ids](
+                                                 bsons::Document &resources) {
                 has_data = this->buildResources(resources, get_ids);
               });
         });
