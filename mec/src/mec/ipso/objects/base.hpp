@@ -2,10 +2,9 @@
 #define MEC_IPSO_OBJECTS_BASE_HPP_
 
 #include "../../bson_utils.hpp"
-#include "../../fields.hpp"
+#include "../../consts.hpp"
 #include "../../utils.hpp"
 #include "../build_result.hpp"
-#include "../consts.hpp"
 #include "../definitions.hpp"
 #include <cstdlib>
 #include <ctime>
@@ -83,13 +82,10 @@ protected:
       bool appended_resources = false;
 
       for (auto const &el : *get_ids) {
-        auto type = el.type();
-
         // IDs can only be integers, anything else is ignored.
-        if (type == pot::bson::Element::Int32 ||
-            type == pot::bson::Element::Int64) {
-          appended_resources |=
-              this->appendGetOnlyResource(resources, el.getInt());
+        int64_t out;
+        if (el.tryGetInt(out)) {
+          appended_resources |= this->appendGetOnlyResource(resources, out);
         }
       }
 

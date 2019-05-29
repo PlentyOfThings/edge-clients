@@ -45,7 +45,7 @@ protected:
         doc.appendInt64(Resource::sReportInterval, this->report_interval_);
         return true;
       default:
-        return Base::appendGetOnlyResource(doc, resource_id);
+        return this->Base::appendGetOnlyResource(doc, resource_id);
     }
   }
 

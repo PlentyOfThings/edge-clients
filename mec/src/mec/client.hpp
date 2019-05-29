@@ -1,7 +1,7 @@
 #ifndef MEC_CLIENT_H_
 #define MEC_CLIENT_H_
 
-#include "./ipso/consts.hpp"
+#include "./consts.hpp"
 #include "./ipso/objects/base.hpp"
 #include <cstdlib>
 
@@ -58,18 +58,21 @@ private:
     int64_t objectInstance = -1;
     bool found_resources = false;
     for (auto const el : down) {
-      if (el.nameEquals(ipso::kPayloadId)) {
-        if (el.isInt()) {
-          objectId = el.getInt();
+      if (el.nameEquals(fields::kId)) {
+        if (!el.tryGetInt(objectId)) {
+          return false;
         }
-      } else if (el.nameEquals(ipso::kPayloadInstance)) {
-        if (el.isInt()) {
-          objectInstance = el.getInt();
+      } else if (el.nameEquals(fields::kInstance)) {
+        if (!el.tryGetInt(objectInstance)) {
+          return false;
         }
-      } else if (el.nameEquals(ipso::kPayloadResources)) {
-        if (el.type() == pot::bson::Element::Array) {
-          resources = el.getArr();
+      } else if (el.nameEquals(fields::kResources)) {
+        bsond::data_type::Arr out;
+        if (el.tryGetArr(out)) {
+          resources = out.arr;
           found_resources = true;
+        } else {
+          return false;
         }
       }
     }

@@ -1,0 +1,67 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "debug buildfs",
+      "command": "pio",
+      "args": ["run", "--target=buildfs", "--environment=d1_mini:debug"],
+      "problemMatcher": ["$platformio"]
+    },
+    {
+      "type": "shell",
+      "label": "release builfs",
+      "command": "pio",
+      "args": ["run", "--target=buildfs", "--environment=d1_mini:release"],
+      "problemMatcher": ["$platformio"]
+    },
+    {
+      "type": "shell",
+      "label": "debug upload",
+      "command": "pio",
+      "args": ["run", "--target=upload", "--environment=d1_mini:debug"],
+      "problemMatcher": ["$platformio"]
+    },
+    {
+      "type": "shell",
+      "label": "release upload",
+      "command": "pio",
+      "args": ["run", "--target=upload", "--environment=d1_mini:release"],
+      "problemMatcher": ["$platformio"]
+    },
+    {
+      "type": "shell",
+      "label": "debug uploadfs",
+      "command": "pio",
+      "args": ["run", "--target=uploadfs", "--environment=d1_mini:debug"],
+      "problemMatcher": ["$platformio"],
+      "dependsOn": "debug upload"
+    },
+    {
+      "type": "shell",
+      "label": "release uploadfs",
+      "command": "pio",
+      "args": ["run", "--target=uploadfs", "--environment=d1_mini:release"],
+      "problemMatcher": ["$platformio"],
+      "dependsOn": "release upload"
+    },
+    {
+      "type": "shell",
+      "label": "debug monitor",
+      "command": "pio",
+      "args": ["device", "monitor"],
+      "problemMatcher": ["$platformio"],
+      "dependsOn": "debug uploadfs"
+    },
+    {
+      "type": "shell",
+      "label": "release monitor",
+      "command": "pio",
+      "args": ["device", "monitor"],
+      "problemMatcher": ["$platformio"],
+      "dependsOn": "release uploadfs"
+    }
+  ]
+}

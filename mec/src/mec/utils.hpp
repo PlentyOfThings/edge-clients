@@ -3,6 +3,8 @@
 
 #include "stdlib.h"
 
+#define SIZE_OF(arr) sizeof(arr) / sizeof(arr[0])
+
 inline size_t copy_str_to(const char src[], char dest[], size_t len) {
   if (len < 1) {
     return 0;
